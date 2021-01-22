@@ -27,15 +27,15 @@
         },
         "wvdStorageAccountName": {
             "type": "string",
-            "defaultValue": ""
+            "defaultValue": "vastorageaccounthtw"
         },
         "wvdKeyVaultName": {
             "type": "string",
-            "defaultValue": "VA-KV"
+            "defaultValue": "VA-Key-Vault1"
         },
         "wvdAutomationAccountName": {
             "type": "string",
-            "defaultValue": "VA-AA"
+            "defaultValue": "VA-Automation"
         },
         "wvdLogAnalyticsWorkspaceName": {
             "type": "string",
