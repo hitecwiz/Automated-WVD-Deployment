@@ -51,7 +51,7 @@
             },
             "resources": [
                 {
-                    "type": "blobServices/containers",
+                    "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
                     "apiVersion": "2019-06-01",
                     "name": "[concat('default/',variables('storageAccountConfig').dscContainer)]",
                     "dependsOn": [
@@ -59,7 +59,7 @@
                     ]
                 },
                 {
-                    "type": "blobServices/containers",
+                    "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
                     "apiVersion": "2019-06-01",
                     "name": "[concat('default/',variables('storageAccountConfig').templateContainer)]",
                     "dependsOn": [
