@@ -11,7 +11,7 @@
       "az_virtualMachineNames": {
           "type": "array"
       },
-      "dj_adminAccount": {
+      "az_vmAdminAccount": {
           "type": "string"
       },
       "dj_adminPassword": {
@@ -123,7 +123,7 @@
         "settings": {
           "name": "[parameters('dj_domainFQDN')]",
           "ouPath": "[parameters('dj_ouPath')]",
-          "user": "[concat(parameters('dj_adminAccount'),'@',parameters('dj_domainFQDN'))]",
+          "user": "[concat(parameters('az_vmAdminAccount'),'@',parameters('dj_domainFQDN'))]",
           "restart": "true",
           "options": "3"
         },

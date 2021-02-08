@@ -823,7 +823,7 @@ The WVD Configuration ARM template is a completely separated process from the in
       "settings": {
         "name": "[parameters('dj_domainFQDN')]",
         "ouPath": "[parameters('dj_ouPath')]",
-        "user": "[concat(parameters('dj_adminAccount'),'@',parameters('dj_domainFQDN'))]",
+        "user": "[concat(parameters('az_vmAdminAccount'),'@',parameters('dj_domainFQDN'))]",
         "restart": "true",
         "options": "3"
       },
