@@ -78,7 +78,7 @@
             }
         },
         "wvd_keyVaultId": {
-            "value": "## wvd_keyVaultId ##",
+            "value": "/subscriptions/cf5bfdc9-de10-4f8e-af12-5d7352167561/resourceGroups/VA1-SVCS-RG/providers/Microsoft.KeyVault/vaults/VA1-KV-ugqojwcpg24bi",
             "metadata": {
                 "description": "Update this value to reflect the resource id of the KeyVault where the secrets are store for the deployment region."
             }
@@ -90,7 +90,7 @@
             }
         },
         "wvd_hostPoolResourceGroupPrefix": {
-            "value": "WVD-POOL-RG-",
+            "value": "VA1-POOL-RG-",
             "metadata": {
                 "description": "Update this value to reflect the Resource Group naming prefix based on the deployment region.  This value is used in a 'copy' loop and the names are derived from the 'copy count' and should support a numerical increase in value appended to the end"
             }
@@ -131,10 +131,10 @@
                     {
                         "deploymentType": "PROD",
                         "deploymentFunction": "VDI",
-                        "fsLogixVhdLocation": "## \\\\SERVERNAME\\SHARE ##",
+                        "fsLogixVhdLocation": "\\\\fslogixhtw.file.core.windows.net\\profiles\\%userdomain%",
                         "dscConfiguration": "WVD-Win10-SessionHost-Config.ps1.zip",
-                        "wvdArtifactLocation": "## \\\\SERVERNAME\\SHARE ##",
-                        "azVmNumberOfInstances": 6,
+                        "wvdArtifactLocation": "\\\\fslogixhtw.file.core.windows.net\\artifacts",
+                        "azVmNumberOfInstances": 2,
                         "azVmStartingIncrement": 1
                     }
                 ]
@@ -144,7 +144,7 @@
             }
         },
         "domain": {
-            "value": "## domain ##",
+            "value": "hitecwiz.com",
             "metadata": {
                 "description": "Domain name used for the VM template created for the Host Pools"
             }
