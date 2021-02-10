@@ -26,7 +26,7 @@
                 "secretName": "WVD-VM-DomainJoin-Account"
             }
         },
-        "dj_adminPassword": {
+        "az_vmAdminAccountPassword": {
             "reference": {
                 "keyVault": {
                 "id": "[parameters('wvd_keyVaultId')]"

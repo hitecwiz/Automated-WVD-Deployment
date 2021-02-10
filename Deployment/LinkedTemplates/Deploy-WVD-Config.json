@@ -14,7 +14,7 @@
       "az_vmAdminAccount": {
           "type": "string"
       },
-      "dj_adminPassword": {
+      "az_vmAdminAccountPassword": {
           "type": "securestring"
       },
       "dj_domainFQDN": {
@@ -128,7 +128,7 @@
           "options": "3"
         },
         "protectedSettings": {
-          "password": "[parameters('dj_adminPassword')]"
+          "password": "[parameters('az_vmAdminAccountPassword')]"
         }
       }
     },

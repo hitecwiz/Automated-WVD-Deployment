@@ -42,7 +42,7 @@
     "wvd_hostpoolName": {
       "type": "string"
     },
-    "az_vmAdminAccountUPN": {
+    "az_vmAdminAccount": {
       "type": "string"
     },
     "az_vmAdminAccountPassword": {
@@ -51,7 +51,7 @@
   },
   "variables": {
     "azVmAvSetName": "[concat(parameters('wvd_hostpoolName'),'-AVSet-',parameters('wvd_groupReference'))]",
-    "existingDomainUsername": "[first(split(parameters('az_vmAdminAccountUPN'), '@'))]",
+    "existingDomainUsername": "[first(split(parameters('az_vmAdminAccount'), '@'))]",
     "storageAccountType": "[parameters('az_vmDiskType')]",
     "wvdResourceLocation": "[resourceGroup().location]",
     "wvdshOffSet": "[if(equals(parameters('wvd_groupReference'),'A'),parameters('az_vmStartingIncrement'),add(parameters('az_vmNumberOfInstances'),parameters('az_vmStartingIncrement')))]"
