@@ -57,10 +57,10 @@ Configuration WvdSessionHostConfig
         ## Local Administrators
         Script LocalAdministratorsGroup {
             GetScript = { return @{'Result' = ''} }
-            SetScript = { Add-LocalGroupMember -Group "Administrators" -Member "PRKRLABS\WVDAdmins" -ErrorAction SilentlyContinue }
+            SetScript = { Add-LocalGroupMember -Group "Administrators" -Member "hitecwiz\WVDAdmins" -ErrorAction SilentlyContinue }
             TestScript = {
                 $Members = Get-LocalGroupMember -Group "Administrators" | Foreach-Object {$_.Name}
-                If ($Members -contains "PRKRLABS\WVDAdmins") { Return $true }
+                If ($Members -contains "hitecwiz\WVDAdmins") { Return $true }
                 Else { Return $false }
             }
             DependsOn = "[Script]DomainJoinSleep"

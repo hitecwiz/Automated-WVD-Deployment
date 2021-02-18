@@ -51,11 +51,11 @@
         },
         "wvdSvcsTemplateUri": {
             "type": "string",
-            "defaultValue": "https://va1wvdfoundation.blob.core.windows.net/templates/Deploy-SVCS-Template.json?sp=rl&st=2021-01-26T22:16:35Z&se=2021-09-05T22:16:00Z&sv=2019-12-12&sr=b&sig=%2BNHnK2vQXDtt7UccMqCzgpGQBbc0JUVtRivZHdv9YkY%3D"
+            "defaultValue": "https://vawvdfoundation.blob.core.windows.net/templates/Deploy-SVCS-Template.json?sp=rl&st=2021-02-15T18:25:08Z&se=2021-09-04T18:25:00Z&sv=2019-12-12&sr=b&sig=JogQIPFnabCuWf%2BJDptEN0K%2F1MIq5CPMYXr6ENRZzhA%3D"
         },
         "wvdNetTemplateUri": {
             "type": "string",
-            "defaultValue": "https://va1wvdfoundation.blob.core.windows.net/templates/Deploy-NET-Template.json?sp=rl&st=2021-01-26T22:03:12Z&se=2021-09-05T22:03:00Z&sv=2019-12-12&sr=b&sig=FXYUrbRnRnzWTnDEDdbgjYH8WSfxgWCcBTrBtTR3fUU%3D"
+            "defaultValue": "https://vawvdfoundation.blob.core.windows.net/templates/Deploy-NET-Template.json?sp=rl&st=2021-02-15T18:24:25Z&se=2021-09-04T18:24:00Z&sv=2019-12-12&sr=b&sig=Gt2rRKtDxTQPdnEACIKAhe1L3vuPPEqrnysdAw92hb0%3D"
         }
     },
     "functions": [],

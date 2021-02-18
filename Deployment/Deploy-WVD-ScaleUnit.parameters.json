@@ -45,7 +45,7 @@
             }
         },
         "vn_virtualNetworkName": {
-            "value": "WVD-VNET",
+            "value": "VA1-VNET",
             "metadata": {
                 "description": "Update this value to reflect the Virtual Network name based on the deployment region."
             }
@@ -57,7 +57,7 @@
             }
         },
         "vn_virtualNetworkResourceGroupName": {
-            "value": "WVD-NET-RG",
+            "value": "VA1-NET-RG",
             "metadata": {
                 "description": "Update this value to reflect the location of the 'vn_virtualNetworkName' parameter"
             }
@@ -84,7 +84,7 @@
             }
         },
         "wvd_workspaceResourceGroup": {
-            "value": "WVD-SVCS-RG",
+            "value": "VA1-SVCS-RG",
             "metadata": {
                 "description": "Update this value to reflect the Resource Group where the 'wvd_workspaceName' parameter was created."
             }
@@ -131,9 +131,9 @@
                     {
                         "deploymentType": "PROD",
                         "deploymentFunction": "VDI",
-                        "fsLogixVhdLocation": "\\\\fslogixhtw.file.core.windows.net\\profiles\\%userdomain%",
+                        "fsLogixVhdLocation": "\\\\win19wvdsvcs01.hitecwiz.com\\profiles\\%userdomain%",
                         "dscConfiguration": "WVD-Win10-SessionHost-Config.ps1.zip",
-                        "wvdArtifactLocation": "\\\\fslogixhtw.file.core.windows.net\\artifacts",
+                        "wvdArtifactLocation": "\\\\win19wvdsvcs01.hitecwiz.com\\artifacts",
                         "azVmNumberOfInstances": 2,
                         "azVmStartingIncrement": 1
                     }

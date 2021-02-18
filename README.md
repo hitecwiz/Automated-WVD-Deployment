@@ -115,9 +115,13 @@ Creates the following Azure Components:
     - WVD-POOL-RG-02 (Host Pool Resources)
   - Resources:
     - WVD-VNET (Virtual Network - 192.168.0.0/16)
+    - WVD-VNET (HTW Virtual Network - 192.168.0.0/24)
       - WVD-Subnet-00 (Shared Services subnet - 192.168.0.0/24)
+      - WVD-Subnet-00 (HTW Shared Services subnet - 192.168.0.0/27)
       - WVD-Subnet-01 (Host Pool 01 subnet - 192.168.1.0/24)
+      - WVD-Subnet-01 (HTW Host Pool 01 subnet - 192.168.0.32/27)
       - WVD-Subnet-02 (Host Pool 02 subnet - 192.168.2.0/24)
+      - WVD-Subnet-02 (HTW Host Pool 02 subnet - 192.168.0.64/27)
     - WVD-KV-(uniqueString)
       - Secrets:
         - WVD-VM-Admin-Account

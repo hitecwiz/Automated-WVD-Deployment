@@ -27,6 +27,10 @@
         "az_vmNumberOfInstances": {
             "type": "int"
         },
+        "az_vmStartingIncrement": {
+            "type": "int", 
+            "defaultValue": 1
+        },
         "az_vmImageOffer": {
             "type": "string"
         },
@@ -257,6 +261,9 @@
                     },
                     "az_vmNumberOfInstances": {
                         "value": "[variables('wvdSessionHostInstances')]"
+                    },
+                    "az_vmStartingIncrement": {
+                        "value": "[parameters('az_vmStartingIncrement')]"
                     },
                     "az_vmNamePrefix": {
                         "value": "[variables('wvdshPrefix')]"
