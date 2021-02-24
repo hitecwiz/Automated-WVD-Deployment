@@ -133,7 +133,7 @@
                         "deploymentFunction": "VDI",
                         "fsLogixVhdLocation": "\\\\win19wvdsvcs01.hitecwiz.com\\profiles\\%userdomain%",
                         "dscConfiguration": "WVD-Win10-SessionHost-Config.ps1.zip",
-                        "wvdArtifactLocation": "\\\\win19wvdsvcs01.hitecwiz.com\\artifacts",
+                        "wvdArtifactLocation": "\\\\win19wvdsvcs01.hitecwiz.com\\artifacts\\wvdartifacts",
                         "azVmNumberOfInstances": 2,
                         "azVmStartingIncrement": 1
                     }

@@ -312,7 +312,9 @@ Function Get-LatestWVDConfigZip {
             Else {
                 If (Test-Path -Path $LocalPath) {
                     $latestZipUri = ($list | Sort-Object Date -Descending | Select-Object -First 1).Url
+            Write-Verbose ("Ray - before1 zipuri: {0}" -f $latestZipUri)
                     (New-Object System.Net.WebClient).DownloadFile($latestZipUri,("{0}\wvdConfiguration.zip" -f $LocalPath))
+                    Write-Verbose ("Ray - after1")
                     $wvdConfigurationZip = Get-ChildItem -Path ("{0}\wvdConfiguration.zip" -f $LocalPath) -File
                     If ($wvdConfigurationZip) { Return $wvdConfigurationZip.FullName }
                 }
@@ -1396,7 +1398,7 @@ Function Expand-AzWvdHostPool {
         If ($Results.ProvisioningState -eq "Succeeded") {
             Write-Host ("[{0}] WVD Host Pool Expansion Succeeded!" -f $Results.Timestamp.ToLocalTime())
 
-            $wvdDscConfigZipUrl = Get-LatestWVDConfigZip -LocalPath "\\SERVER\SHARE"
+            $wvdDscConfigZipUrl = Get-LatestWVDConfigZip -LocalPath "\\win19wvdsvcs01\Artifacts"
 
             $dscZipUri = New-AzStorageBlobSASToken -Container dsc -Blob ("{0}" -f $HostPool.Tag["WVD-DscConfiguration"]) -Protocol HttpsOnly -Permission r -StartTime (Get-Date) -ExpiryTime $expirationTime -Context $stgAccountContext -FullUri
 
@@ -1774,7 +1776,7 @@ Function New-AzWvdSessionHostConfig {
     BEGIN {
 
         $expirationTime = (Get-Date).AddHours(12)
-        $wvdConfigZipPath = "\\SERVER\SHARE"
+        $wvdConfigZipPath = "\\win19wvdsvcs01\Artifacts"
         $coreAzContext = Set-AzContext -Subscription $StorageAccountSubscription
         $stgAccountContext = (Get-AzStorageAccount -Name $StorageAccountName -ResourceGroupName $StorageAccountResourceGroup -DefaultProfile $coreAzContext).Context
         $wvdDscConfigZipUrl = Get-LatestWVDConfigZip -Path $wvdConfigZipPath
@@ -1838,7 +1840,7 @@ Function New-AzWvdSessionHostConfig {
                 wvd_deploymentType = $HPs[$HPChoice].Tag["WVD-Deployment"]
                 wvd_deploymentFunction = $HPs[$HPChoice].Tag["WVD-Function"]
                 wvd_fsLogixVHDLocation = $FsLogixVhdLocation
-                wvd_ArtifactLocation = "\\SERVER\SHARE"
+                wvd_ArtifactLocation = "\\win19wvdsvcs01\Artifacts"
                 wvd_hostPoolName = $HPs[$HPChoice].Name
                 wvd_hostPoolToken = $wvdHostPoolToken.Token
                 wvd_sessionHostDSCModuleZipUri = $dscZipUri
