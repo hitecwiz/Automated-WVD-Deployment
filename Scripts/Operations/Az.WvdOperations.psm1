@@ -312,7 +312,8 @@ Function Get-LatestWVDConfigZip {
             Else {
                 If (Test-Path -Path $LocalPath) {
                     $latestZipUri = ($list | Sort-Object Date -Descending | Select-Object -First 1).Url
-            Write-Verbose ("Ray - before1 zipuri: {0}" -f $latestZipUri)
+                    Write-Verbose ("LocalPath is defined as: {0}" -f $LocalPath)
+                    Write-Verbose ("DSC zipuri to be downloaded: {0}" -f $latestZipUri)
                     (New-Object System.Net.WebClient).DownloadFile($latestZipUri,("{0}\wvdConfiguration.zip" -f $LocalPath))
                     Write-Verbose ("Ray - after1")
                     $wvdConfigurationZip = Get-ChildItem -Path ("{0}\wvdConfiguration.zip" -f $LocalPath) -File
@@ -1117,7 +1118,7 @@ Function New-AzWvdDeployment {
                 HostPoolName = [System.String]::Empty
             }
             New-AzWvdLogEntry -customerId $azLogAnalyticsId -sharedKey $azLogAnalyticsKey -logName "WVD_AutomatedDeployments_CL" -logMessage $logEntry -Verbose:$false
-
+            Write-Verbose ("LocalPath 1121 is defined as: {0}" -f $deploymentParameters.parameters.wvd_hostPoolConfig.value.configs[0].wvdArtifactLocation)
             $wvdDscConfigZipUrl = Get-LatestWVDConfigZip -OutputType Local -LocalPath $deploymentParameters.parameters.wvd_hostPoolConfig.value.configs[0].wvdArtifactLocation
 
             [System.Collections.ArrayList]$deploymentJobs = @()
@@ -1129,7 +1130,7 @@ Function New-AzWvdDeployment {
                 $wvdHostPoolToken = New-AzWvdRegistrationInfo -ResourceGroupName $outputHash[$hostPool].resourceGroupName -HostPoolName $hostPool -ExpirationTime $expirationTime
                 $vmNames = Get-AzVm -ResourceGroupName $outputHash[$hostPool].resourceGroupName | ForEach-Object {$_.Name}
 
-                Write-Host ("[{0}] Host Pool: {1} | Starting WVD Session Host Configuration..." -f (Get-Date), $hostPool)
+                Write-Host ("[{0}] Host Pool: {1} | 1133Starting WVD Session Host Configuration..." -f (Get-Date), $hostPool)
 
                 $logEntry = [PSCustomObject]@{
                     Timestamp = [DateTime]::UtcNow.ToString('o')
@@ -1161,16 +1162,21 @@ Function New-AzWvdDeployment {
                     TemplateUri = $DscTemplateUri
                     TemplateParameterFile = ("{0}\dsc.parameters.json" -f $env:TEMP)
                 }
-                
+                Write-Verbose ("wvd_dscConfigZipUrl 1165 is defined as: {0}" -f $wvdDscConfigZipUrl)
+                Write-Verbose ("wvd_hostPoolName 1166 is defined as: {0}" -f $hostPool)
+                Write-Verbose ("wvd_sessionHostDSCModuleZipUri 1167 is defined as: {0}" -f $dscZipUri)
+                Write-Verbose ("TemplateUri 1168 is defined as: {0}" -f $DscTemplateUri)
+                Write-Verbose ("TemplateParameterFile 1169 is defined as: {0}" -f $env:TEMP)
                 Write-Debug ("Start Configuration: {0}" -f $hostPool)
-                $deploymentJob = New-AzResourceGroupDeployment @templateParams -AsJob
+                $deploymentJob = New-AzResourceGroupDeployment @templateParams -AsJob -Verbose
                 If ($deploymentJob) {
                     try {
                         While ($true) {
+                            Write-Verbose ("ResourceGroupName 1171 is defined as: {0}" -f $outputHash[$hostPool].resourceGroupName)               
                             If (Get-AzResourceGroupDeployment -ResourceGroupName $outputHash[$hostPool].resourceGroupName -Name ("Deploy-WVD-DscConfiguration-{0}" -f $deploymentString) -ErrorAction SilentlyContinue) { Break }
                             Else {
                                 Write-Verbose ("[{0}] Waiting for job: Deploy-WVD-DscConfiguration-{1}" -f (Get-Date),$deploymentString)
-                                Start-Sleep -Seconds 5
+                                Start-Sleep -Seconds 20
                             }
                         }
 
@@ -1398,7 +1404,7 @@ Function Expand-AzWvdHostPool {
         If ($Results.ProvisioningState -eq "Succeeded") {
             Write-Host ("[{0}] WVD Host Pool Expansion Succeeded!" -f $Results.Timestamp.ToLocalTime())
 
-            $wvdDscConfigZipUrl = Get-LatestWVDConfigZip -LocalPath "\\win19wvdsvcs01\Artifacts"
+            $wvdDscConfigZipUrl = Get-LatestWVDConfigZip -LocalPath "\\win19wvdsvcs01\Artifacts\wvdartifacts"
 
             $dscZipUri = New-AzStorageBlobSASToken -Container dsc -Blob ("{0}" -f $HostPool.Tag["WVD-DscConfiguration"]) -Protocol HttpsOnly -Permission r -StartTime (Get-Date) -ExpiryTime $expirationTime -Context $stgAccountContext -FullUri
 
@@ -1406,7 +1412,7 @@ Function Expand-AzWvdHostPool {
             $wvdHostPoolToken = New-AzWvdRegistrationInfo -ResourceGroupName $ResourceGroupName -HostPoolName $HostPoolName -ExpirationTime $expirationTime
             $vmNames = Get-AzVM -ResourceGroupName $ResourceGroupName -Status | ForEach-Object {$_.Name}
 
-            Write-Host ("[{0}] Host Pool: {1} | Starting WVD Session Host Configuration..." -f (Get-Date), $HostPoolName)
+            Write-Host ("[{0}] Host Pool: {1} | ..." -f (Get-Date), $HostPoolName)
             $templateParams = [Ordered]@{
                 Name = ("Deploy-WVD-DscConfiguration-{0}" -f $deploymentString)
                 az_virtualMachineNames = $vmNames
@@ -1597,10 +1603,10 @@ Function New-AzWvdSessionHosts {
             Write-Host ("[{0}] Host Pool: {1} | Generating Host Pool registration token..." -f (Get-Date), $HostPoolName)
             $wvdHostPoolToken = New-AzWvdRegistrationInfo -ResourceGroupName $ResourceGroupName -HostPoolName $HostPoolName -ExpirationTime $expirationTime
             
-            Write-Host ("[{0}] Host Pool: {1} | Starting WVD Session Host Configuration..." -f (Get-Date), $HostPoolName)
+            Write-Host ("[{0}] Host Pool: {1} | 1601Starting WVD Session Host Configuration..." -f (Get-Date), $HostPoolName)
             $logEntry = [PSCustomObject]@{
                 Timestamp = [DateTime]::UtcNow.ToString('o')
-                CorrelationId = $correlationId
+
                 Computer = $env:COMPUTERNAME
                 UserName = $userName
                 EntryType = "INFO"
@@ -1628,14 +1634,17 @@ Function New-AzWvdSessionHosts {
                 TemplateUri = $DscTemplateUri
                 TemplateParameterFile = ("{0}\dsc.parameters.json" -f $env:TEMP)
             }
-            
+            Write-Verbose ("[{0}] Starting deployment job 1632:  wvd_dscConfigZipUrl-{1}" -f (Get-Date),$wvdDscConfigZipUrl)
+            Write-Verbose ("[{0}] Starting deployment job 1633:  wvd_sessionHostDSCModuleZipUri-{1}" -f (Get-Date),$dscZipUri)
+            Write-Verbose ("[{0}] Starting deployment job 1634:  TemplateUri-{1}" -f (Get-Date),$DscTemplateUri)
+            Start-Sleep -Seconds 120
             $deploymentJob = New-AzResourceGroupDeployment @templateParams -AsJob
             If ($deploymentJob) {
                 try {
                     While ($true) {
                         If (Get-AzResourceGroupDeployment -ResourceGroupName $ResourceGroupName -Name ("Deploy-WVD-DscConfiguration-{0}" -f $deploymentString) -ErrorAction SilentlyContinue) { Break }
                         Else {
-                            Write-Verbose ("[{0}] Waiting for job: Deploy-WVD-DscConfiguration-{1}" -f (Get-Date),$deploymentString)
+                            Write-Verbose ("[{0}] Waiting 1641for job: Deploy-WVD-DscConfiguration-{1}" -f (Get-Date),$deploymentString)
                             Start-Sleep -Seconds 5
                         }
                     }
@@ -1776,7 +1785,7 @@ Function New-AzWvdSessionHostConfig {
     BEGIN {
 
         $expirationTime = (Get-Date).AddHours(12)
-        $wvdConfigZipPath = "\\win19wvdsvcs01\Artifacts"
+        $wvdConfigZipPath = "\\win19wvdsvcs01\Artifacts\wvdartifacts"
         $coreAzContext = Set-AzContext -Subscription $StorageAccountSubscription
         $stgAccountContext = (Get-AzStorageAccount -Name $StorageAccountName -ResourceGroupName $StorageAccountResourceGroup -DefaultProfile $coreAzContext).Context
         $wvdDscConfigZipUrl = Get-LatestWVDConfigZip -Path $wvdConfigZipPath
@@ -1829,7 +1838,7 @@ Function New-AzWvdSessionHostConfig {
                 $deploymentName = ("Deploy-WVD-DscConfiguration-{0}" -f $deploymentString)
             }
         
-            Write-Host ("Host Pool: {0} | Starting WVD Session Host Configuration (AsJob)..." -f $HPs[$HPChoice].Name)
+            Write-Host ("Host Pool: {0} | 1833Starting WVD Session Host Configuration (AsJob)..." -f $HPs[$HPChoice].Name)
             
             $templateParams = [Ordered]@{
                 Name = $deploymentName
@@ -1840,7 +1849,7 @@ Function New-AzWvdSessionHostConfig {
                 wvd_deploymentType = $HPs[$HPChoice].Tag["WVD-Deployment"]
                 wvd_deploymentFunction = $HPs[$HPChoice].Tag["WVD-Function"]
                 wvd_fsLogixVHDLocation = $FsLogixVhdLocation
-                wvd_ArtifactLocation = "\\win19wvdsvcs01\Artifacts"
+                wvd_ArtifactLocation = "\\win19wvdsvcs01\Artifacts\wvdartifacts"
                 wvd_hostPoolName = $HPs[$HPChoice].Name
                 wvd_hostPoolToken = $wvdHostPoolToken.Token
                 wvd_sessionHostDSCModuleZipUri = $dscZipUri
@@ -1848,7 +1857,7 @@ Function New-AzWvdSessionHostConfig {
                 TemplateUri = $DscTemplateUri
                 TemplateParameterFile = ("{0}\dsc.parameters.json" -f $env:TEMP)
             }
-
+            Write-Host ("Initiate DSC Configuration Deployment1855")
             If ($PSCmdlet.ShouldProcess($HPs[$HPChoice].Name,"Initiate DSC Configuration Deployment")) {
                 $deploymentJob = New-AzResourceGroupDeployment @templateParams -AsJob
                 [Void]$deploymentJobs.Add($deploymentJob)
